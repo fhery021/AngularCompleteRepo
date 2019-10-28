@@ -4,10 +4,10 @@
       <a routerLink="/" class="nav-link active">Home</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" [routerLink]="['user', 1]">User 1</a>
+      <a class="nav-link" [routerLink]="['user', 1]">User 1 {{ user1Activated ? '(activated)' : '' }} </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" [routerLink]="['user', 2]">User 2</a>
+      <a class="nav-link" [routerLink]="['user', 2]">User 2 {{ user2Activated ? '(activated)' : '' }}</a>
     </li>
   </ul>
   <hr>
