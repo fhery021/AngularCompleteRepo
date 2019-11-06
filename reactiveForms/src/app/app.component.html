@@ -19,7 +19,7 @@
           <input type="text" id="email" formControlName="email" class="form-control">
           <span *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched"
             class="help-block">
-            <span *ngIf="emailLeftEmpty; else wrongEmailReasons">Email address left empty</span>
+            <span *ngIf="emailLeftEmpty; else wrongEmailReasons">Email left empty</span>
             <ng-template #wrongEmailReasons>
               <span *ngFor="let reason of emailInvalidReasons">
                 {{ reason }}
