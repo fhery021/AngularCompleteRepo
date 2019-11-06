@@ -6,16 +6,25 @@
         <div formGroupName="userData" class="form-group">
           <label for="username">Username</label>
           <input type="text" id="username" formControlName="username" class="form-control">
+
           <span *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched"
             class="help-block">
-            Please enter a valid username.
+            This field is required!
           </span>
+          <hr>
+          <!-- <span *ngIf="signupForm.get('userData.username').errors['nameIsForbidden']" class="help-block">Username is forbidden</span>
+          <span *ngIf="!signupForm.get('userData.username').errors['required']" class="help-block">Username is required</span> -->
 
-          <label for="email">email</label>
+          <label for="email">Email</label>
           <input type="text" id="email" formControlName="email" class="form-control">
           <span *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched"
             class="help-block">
-            Please enter a valid e-mail address.
+            <span *ngIf="emailLeftEmpty; else wrongEmailReasons">Email address left empty</span>
+            <ng-template #wrongEmailReasons>
+              <span *ngFor="let reason of emailInvalidReasons">
+                {{ reason }}
+              </span>
+            </ng-template>
           </span>
         </div>
 
@@ -28,6 +37,13 @@
           <span *ngIf="!signupForm.valid && signupForm.touched" class="help-block">
             Please enter valid data in the form and submit again.
           </span>
+        </div>
+        <div formArrayName="hobbies">
+          <h4>Your Hobbies</h4>
+          <button class="btn btn-default" type="button" (click)="onAddHobby()">Add Hobby</button>
+          <div class="form-group" *ngFor="let hobbyControl of signupForm.get('hobbies').controls; let i = index">
+            <input type="text" class="form-control" [formControlName]="i">
+          </div>
         </div>
 
         <button class="btn btn-primary" type="submit">Submit</button>
