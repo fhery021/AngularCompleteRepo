@@ -1,27 +1,21 @@
 import { ServerService } from './servers.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ServerDTO, Server } from './ServerDTO';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  servers = [
-    {
-      name: 'Testserver',
-      capacity: 10,
-      id: this.generateId()
-    },
-    {
-      name: 'Liveserver',
-      capacity: 100,
-      id: this.generateId()
-    }
-  ];
+export class AppComponent implements OnInit {
+  servers: Server[] = [];
+  serverDTO: ServerDTO;
 
   constructor(private serverService: ServerService) { }
 
+  ngOnInit(): void {
+    this.loadServers();
+  }
 
   onAddServer(serverName: string) {
     this.servers.push({
@@ -31,11 +25,31 @@ export class AppComponent {
     });
   }
 
+  loadServers() {
+    this.servers = [];
+    return this.serverService
+      .getServers()
+      .subscribe((data) => {
+        this.serverDTO = data;
+        const values = Object.values(this.serverDTO);
+        (values[0] as Array<Server>).forEach(server => this.servers.push(server));
+      },
+      (error) => console.log(error));
+  }
+
+  onGet() {
+    this.serverService.getServers()
+      .subscribe(
+        (data) => console.log(data),
+        (error) => console.log(error)
+      );
+  }
+
   onSave() {
     this.serverService
       .storeServers(this.servers)
       .subscribe(
-        (response) => console.log(response),
+        (response: Response) => console.log(response),
         (error) => console.log(error)
       );
 
