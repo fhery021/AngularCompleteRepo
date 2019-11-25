@@ -1,6 +1,6 @@
 import { ServerService } from './servers.service';
 import { Component, OnInit } from '@angular/core';
-import { ServerDTO, Server } from './ServerDTO';
+import { Subscription, Observer, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +8,14 @@ import { ServerDTO, Server } from './ServerDTO';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  servers: Server[] = [];
-  serverDTO: ServerDTO;
+  servers: any = [];
+
+  // errors: Subject;
 
   constructor(private serverService: ServerService) { }
 
   ngOnInit(): void {
+    // this.errors
     this.loadServers();
   }
 
@@ -29,20 +31,14 @@ export class AppComponent implements OnInit {
     this.servers = [];
     return this.serverService
       .getServers()
-      .subscribe((data) => {
-        this.serverDTO = data;
-        const values = Object.values(this.serverDTO);
-        (values[0] as Array<Server>).forEach(server => this.servers.push(server));
+      .subscribe((data: any[]) => {
+        this.servers = data;
       },
-      (error) => console.log(error));
+        (error) => console.log(error));
   }
 
   onGet() {
-    this.serverService.getServers()
-      .subscribe(
-        (data) => console.log(data),
-        (error) => console.log(error)
-      );
+    this.loadServers();
   }
 
   onSave() {

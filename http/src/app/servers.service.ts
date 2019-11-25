@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, retry, catchError } from 'rxjs/operators';
-import { ServerDTO } from './ServerDTO';
 import { throwError, Observable } from 'rxjs';
 
 @Injectable()
@@ -15,12 +14,16 @@ export class ServerService {
   private url = 'https://udemy-ng-http-3c8d2.firebaseio.com/data.json';
 
   storeServers(servers: any[]) {
-    return this.http.post(this.url, servers, { headers: this.httpOptions });
+    return this.http.put(this.url, servers, { headers: this.httpOptions })
+      .pipe(
+        retry(1),
+        catchError(this.errorHandl)
+      );
   }
 
-  getServers(): Observable<ServerDTO> {
+  getServers() {
     return this.http
-      .get<ServerDTO>(this.url)
+      .get(this.url, { headers: this.httpOptions })
       .pipe(
         retry(1),
         catchError(this.errorHandl)

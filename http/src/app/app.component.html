@@ -16,6 +16,10 @@
       <button class="btn btn-success" (click)="onAddServer(serverName.value)">Add New Server</button>
       <hr>
 
+      <!-- <div class="alert alert-danger" role="alert" *ngIf="errors">
+        {{errors}}
+      </div> -->
+
       <ul class="list-group" *ngFor="let server of servers">
         <li class="list-group-item">{{ server.name }} (ID: {{ server.id }})</li>
       </ul>
