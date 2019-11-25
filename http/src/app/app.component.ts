@@ -1,6 +1,7 @@
 import { ServerService } from './servers.service';
 import { Component, OnInit } from '@angular/core';
 import { Subscription, Observer, Subject } from 'rxjs';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { Subscription, Observer, Subject } from 'rxjs';
 export class AppComponent implements OnInit {
   servers: any = [];
 
-  // errors: Subject;
+  errors = '';
 
   constructor(private serverService: ServerService) { }
 
@@ -31,10 +32,10 @@ export class AppComponent implements OnInit {
     this.servers = [];
     return this.serverService
       .getServers()
-      .subscribe((data: any[]) => {
-        this.servers = data;
-      },
-        (error) => console.log(error));
+      .subscribe(
+        (data: any[]) => { this.servers = data; },
+        (error) => { this.errors = error; }
+      );
   }
 
   onGet() {
@@ -46,7 +47,7 @@ export class AppComponent implements OnInit {
       .storeServers(this.servers)
       .subscribe(
         (response: Response) => console.log(response),
-        (error) => console.log(error)
+        (error) => this.errors = error
       );
 
   }
