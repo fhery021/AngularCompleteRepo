@@ -11,10 +11,13 @@ export class ServerService {
   // optional
   private httpOptions = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  private url = 'https://udemy-ng-http-3c8d2.firebaseio.com/data.json';
+  private baseURL = 'https://udemy-ng-http-3c8d2.firebaseio.com';
+  private dataURL = this.baseURL + '/data.json';
+  private appNameURL = this.baseURL + '/appName.json';
+
 
   storeServers(servers: any[]) {
-    return this.http.put(this.url, servers, { headers: this.httpOptions })
+    return this.http.put(this.dataURL, servers, { headers: this.httpOptions })
       .pipe(
         retry(1),
         catchError(this.errorHandl)
@@ -23,7 +26,16 @@ export class ServerService {
 
   getServers() {
     return this.http
-      .get(this.url, { headers: this.httpOptions })
+      .get(this.dataURL, { headers: this.httpOptions })
+      .pipe(
+        retry(1),
+        catchError(this.errorHandl)
+      );
+  }
+
+  getAppName() {
+    return this.http
+      .get(this.appNameURL)
       .pipe(
         retry(1),
         catchError(this.errorHandl)

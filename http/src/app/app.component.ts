@@ -9,9 +9,10 @@ import { TouchSequence } from 'selenium-webdriver';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  servers: any = [];
 
+  servers: any = [];
   errors = '';
+  appName = this.serverService.getAppName();
 
   constructor(private serverService: ServerService) { }
 
